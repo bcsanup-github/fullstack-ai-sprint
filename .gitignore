@@ -1,0 +1,15 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+# Secrets — never commit these
+.env
+*.env
+!.env.example
+# Django
+db.sqlite3
+# Node (later days)
+node_modules/
+# OS
+.DS_Store
+Thumbs.db
