@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import ping, MetricsView, TimeView
+
+from .views import MetricsView, TimeView, ping
 
 urlpatterns = [
     path("ping/", ping),

@@ -1,16 +1,39 @@
-import os
 import json
+import os
+
 from dotenv import load_dotenv
 from huggingface_hub import InferenceClient
 from huggingface_hub.errors import HfHubHTTPError
-from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from .serializers import PromptSerializer
 
 load_dotenv()
 
 MOCK_MODE = os.getenv("MOCK_MODE", "true").lower() == "true"
 client = InferenceClient(api_key=os.getenv("HF_TOKEN"), provider="auto")
+
+SYSTEM_PROMPTS = {
+    "summarize": "You are a concise summarizer. Reply in 1-2 clear sentences.",
+    "rewrite": "You rewrite the user's text to be clearer and more polished.",
+    "explain": "You explain the user's text simply, as if to a curious beginner.",
+    "analyze": (
+        "Analyze the user's text. Respond with ONLY valid JSON, no other text, "
+        'in this exact shape: '
+        '{"sentiment": "positive|negative|neutral", '
+        '"topics": ["topic1", "topic2"], '
+        '"summary": "one sentence"}'
+    ),
+}
+
+
+def parse_json_reply(reply):
+    cleaned = reply.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip()
+    try:
+        return json.loads(cleaned)
+    except json.JSONDecodeError:
+        return {"error": "Model did not return valid JSON", "raw": reply}
 
 
 class PromptView(APIView):
