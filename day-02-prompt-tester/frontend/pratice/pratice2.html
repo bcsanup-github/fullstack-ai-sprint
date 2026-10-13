@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<!-- Form, no reload. Make an HTML form with one text input and a button.
+     On submit, preventDefault() and console.log the input's value.
+     Confirm the page does not reload (watch the tab — no flicker). -->
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Form Pratice</title>
+    </head>
+    <body>
+
+        <form id="myForm">
+            <input
+            type="text"
+            id="nameInput"
+            placeholder="Enter your name"
+            >
+            <button type="submit">Submit</button>
+        </form>
+
+        <script>
+            const form = document.getElementById("myForm");
+            const input = document.getElementById("nameInput");
+
+            form.addEventListener("submit", function(event){
+                event.preventDefault();
+
+                console.log(input.value);
+            });
+        </script>
+    </body>
+</html>

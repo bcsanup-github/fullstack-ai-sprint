@@ -1,0 +1,32 @@
+name: CI
+
+on: 
+  push:
+    branches: [main, "day-**"]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: day-02-prompt-tester/backend
+      steps:
+        - uses: actions/checkout@v4
+
+        - uses: actions/setup-python@v5
+          with:
+            python-version: "3.13"
+
+        - name: Install dependencies
+          run: |
+            pip install -r requirements.txt
+
+        - name: Lint with ruff
+          run: ruff check .
+
+        - name: Run tests
+          env:
+            MOCK_MODE: "true"
+            HF_TOKEN: "dummy-not-used-in-mock"
+          run: python manage.py test
