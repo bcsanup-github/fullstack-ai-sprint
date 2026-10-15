@@ -1,0 +1,19 @@
+services:
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+
+  api:
+    build: ./backend
+    ports:
+      - "8000:8000"
+
+    environment:
+      - REDIS_URL=redis://redis:6379/1
+      - MOCK_MODE=true
+      - HF_TOKEN=${HF_TOKEN}
+      - OPENWEATHER_KEY=${OPENWEATHER_KEY}
+
+    depends_on:
+      - redis
+      
